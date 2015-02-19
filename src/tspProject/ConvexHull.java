@@ -2,20 +2,15 @@ package tspProject;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Scanner;
 
 public class ConvexHull {
 	private static ArrayList<Vector> points = new ArrayList<Vector>();
 	private static ArrayList<Vector> hull = new ArrayList<Vector>();
 	
 	public static void main(String[] args) {
-		points.add(new Vector(2, 0, 0));
-		points.add(new Vector(-2, 0, 0));
-		points.add(new Vector(-1, 0, 0));
-		points.add(new Vector(0, 1, 0));
-		points.add(new Vector(1, 0, 0));
-		points.add(new Vector(0, -1, 0));
-		points.add(Vector.nullVector());
-		
+		addPoints();
+		System.out.println("Beginning...");
 		Vector rightMostPoint = points.get(0);
 		for(Vector v: points) {
 			if(v.getX() > rightMostPoint.getX()) {
@@ -59,5 +54,18 @@ public class ConvexHull {
 			return 2*Math.PI - Vector.angleBetween(cartesian, new Vector(1, 0, 0));
 		}
 		else return 2*Math.PI;
+	}
+	
+	public static void addPoints() {
+		Scanner scan = new Scanner(System.in);
+		System.out.println("How many points would you like to add?");
+		int numberOfPoints = scan.nextInt();
+		System.out.println("Enter points in format 'xcoord ycoord zcoord'.");
+		for(int i = 0; i < numberOfPoints; i++) {
+			double xCoord = scan.nextDouble();
+			double yCoord = scan.nextDouble();
+			double zCoord = scan.nextDouble();
+			points.add(new Vector(xCoord, yCoord, zCoord));
+		}
 	}
 }
