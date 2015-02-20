@@ -22,6 +22,7 @@ public class ConvexHull {
 		}
 		hull.add(0, rightMostPoint);
 		
+		//constructs convex hull
 		Vector frontier = rightMostPoint;
 		Vector candidate = Vector.nullVector();
 		while(!candidate.equals(rightMostPoint)) {
@@ -37,6 +38,20 @@ public class ConvexHull {
 			frontier = candidate;
 			points.remove(candidate);
 		}
+		
+		//adds points on the interior to the hull by checking for the closest point and working up. BUGGED
+		while(!points.isEmpty()) {
+			candidate = points.get(0);
+			double minDistance = distance(candidate);
+			for(Vector v: points) {
+				if(distance(v) < minDistance) {
+					candidate = v;
+				}
+			}
+			hull.add(hull.indexOf(distanceVector(candidate)), candidate);
+			points.remove(candidate);
+		}
+		
 		for(Vector v: hull) {
 			System.out.println(v);
 		}
@@ -54,6 +69,32 @@ public class ConvexHull {
 			return 2*Math.PI - Vector.angleBetween(cartesian, new Vector(1, 0, 0));
 		}
 		else return 2*Math.PI;
+	}
+	
+	public static double distance(Vector v) {
+		Vector least = hull.get(1);
+		double distance = hull.get(0).subtract(v).magnitude() + hull.get(1).subtract(v).magnitude();
+		for(int i = 1; i < hull.size(); i++) {
+			double d = hull.get(i - 1).subtract(v).magnitude() + hull.get(i).subtract(v).magnitude();
+			if(d < distance) {
+				least = hull.get(i);
+				distance = d;
+			}
+		}
+		return distance;
+	}
+	
+	public static Vector distanceVector(Vector v) { //returns the vector on the hull that is the second of the two vectors whose distance from the vector is least
+		Vector least = hull.get(1);
+		double distance = hull.get(0).subtract(v).magnitude() + hull.get(1).subtract(v).magnitude();
+		for(int i = 1; i < hull.size(); i++) {
+			double d = hull.get(i - 1).subtract(v).magnitude() + hull.get(i).subtract(v).magnitude();
+			if(d < distance) {
+				least = hull.get(i);
+				distance = d;
+			}
+		}
+		return least;
 	}
 	
 	public static void addPoints() {
