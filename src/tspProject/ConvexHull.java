@@ -73,9 +73,9 @@ public class ConvexHull {
 	
 	public static double distance(Vector v) {
 		Vector least = hull.get(1);
-		double distance = hull.get(0).subtract(v).magnitude() + hull.get(1).subtract(v).magnitude();
+		double distance = Math.abs((hull.get(1).getY() - hull.get(0).getY())*v.getX() - (hull.get(1).getX() - hull.get(0).getX())*v.getY() + hull.get(1).getX()*hull.get(0).getY() - hull.get(1).getY()*hull.get(0).getX())/Math.sqrt(Math.pow(hull.get(1).getY() - hull.get(0).getY(), 2) + Math.pow(hull.get(1).getX() - hull.get(0).getX(), 2));
 		for(int i = 1; i < hull.size(); i++) {
-			double d = hull.get(i - 1).subtract(v).magnitude() + hull.get(i).subtract(v).magnitude();
+			double d = Math.abs((hull.get(i).getY() - hull.get(i - 1).getY())*v.getX() - (hull.get(i).getX() - hull.get(i - 1).getX())*v.getY() + hull.get(i).getX()*hull.get(i - 1).getY() - hull.get(i).getY()*hull.get(i - 1).getX())/Math.sqrt(Math.pow(hull.get(i).getY() - hull.get(i - 1).getY(), 2) + Math.pow(hull.get(i).getX() - hull.get(i - 1).getX(), 2));
 			if(d < distance) {
 				least = hull.get(i);
 				distance = d;
@@ -86,9 +86,9 @@ public class ConvexHull {
 	
 	public static Vector distanceVector(Vector v) { //returns the vector on the hull that is the second of the two vectors whose distance from the vector is least
 		Vector least = hull.get(1);
-		double distance = hull.get(0).subtract(v).magnitude() + hull.get(1).subtract(v).magnitude();
+		double distance = Math.abs((hull.get(1).getY() - hull.get(0).getY())*v.getX() - (hull.get(1).getX() - hull.get(0).getX())*v.getY() + hull.get(1).getX()*hull.get(0).getY() - hull.get(1).getY()*hull.get(0).getX())/Math.sqrt(Math.pow(hull.get(1).getY() - hull.get(0).getY(), 2) + Math.pow(hull.get(1).getX() - hull.get(0).getX(), 2));
 		for(int i = 1; i < hull.size(); i++) {
-			double d = hull.get(i - 1).subtract(v).magnitude() + hull.get(i).subtract(v).magnitude();
+			double d = Math.abs((hull.get(i).getY() - hull.get(i - 1).getY())*v.getX() - (hull.get(i).getX() - hull.get(i - 1).getX())*v.getY() + hull.get(i).getX()*hull.get(i - 1).getY() - hull.get(i).getY()*hull.get(i - 1).getX())/Math.sqrt(Math.pow(hull.get(i).getY() - hull.get(i - 1).getY(), 2) + Math.pow(hull.get(i).getX() - hull.get(i - 1).getX(), 2));
 			if(d < distance) {
 				least = hull.get(i);
 				distance = d;
