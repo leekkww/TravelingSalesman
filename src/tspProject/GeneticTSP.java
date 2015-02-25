@@ -19,6 +19,10 @@ public class GeneticTSP {
 			mutation();
 			cull();
 		}
+		ArrayList<Vector> darwin = largestPercentage();
+		for(Vector v: darwin) {
+			System.out.println(darwin);
+		}
 	}
 	
 	public static void addRandomPath(Vector start) {
@@ -67,5 +71,19 @@ public class GeneticTSP {
 			length += path.get(i).subtract(path.get(i - 1)).magnitude();
 		}
 		return length;
+	}
+	
+	public static ArrayList<Vector> largestPercentage() {
+		ArrayList<Vector> frequent = paths.get(0);
+		int frequency = Collections.frequency(paths, frequent);
+		for(int i = 0; i < paths.size(); i++) {
+			if(frequency < Collections.frequency(paths, paths.get(i))) {
+				frequent = paths.get(i);
+				frequency = Collections.frequency(paths, paths.get(i));
+			}
+		}
+		double percentage = frequency*1./paths.size();
+		System.out.println("percentage: " + percentage);
+		return frequent;
 	}
 }
