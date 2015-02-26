@@ -87,6 +87,13 @@ public class Vector {
 		else return false;
 	}
 	
+	public boolean equals(Object o) {
+		if(o instanceof Vector) {
+			return equals((Vector)o);
+		}
+		else return false;
+	}
+	
 	public double getX() {
 		return x;
 	}
