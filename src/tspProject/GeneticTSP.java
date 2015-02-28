@@ -10,14 +10,14 @@ public class GeneticTSP {
 	private static ArrayList<ArrayList<Vector>> paths = new ArrayList<ArrayList<Vector>>();
 	
 	public static void main(String[] args) {
-		list.add(new Vector(0, 0, 0));
-		list.add(new Vector(1, 0, 0));
-		list.add(new Vector(2, 0, 0));
-		list.add(new Vector(0, 1, 0));
-		list.add(new Vector(0, 2, 0));
-		list.add(new Vector(0, 8, 0));
-		list.add(new Vector(4, 4, 0));
-		list.add(new Vector(1, 3, 0));
+		list.add(new Vector(0, 0));
+		list.add(new Vector(1, 0));
+		list.add(new Vector(2, 0));
+		list.add(new Vector(0, 1));
+		list.add(new Vector(0, 2));
+		list.add(new Vector(0, 8));
+		list.add(new Vector(4, 4));
+		list.add(new Vector(1, 3));
 		
 		int initPaths = 1000;
 		int iterations = 10000;

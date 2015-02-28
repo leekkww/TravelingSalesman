@@ -5,11 +5,13 @@ import java.util.Collections;
 import java.util.Scanner;
 
 public class ConvexHull {
+
+    private static final double gridSize = 100;
 	private static ArrayList<Vector> points = new ArrayList<Vector>();
 	private static ArrayList<Vector> hull = new ArrayList<Vector>();
 	
 	public static void main(String[] args) {
-		addPoints();
+		generatePoints(30);
 		System.out.println("Beginning...");
 		Vector rightMostPoint = points.get(0);
 		for(Vector v: points) {
@@ -51,7 +53,8 @@ public class ConvexHull {
 			hull.add(hull.indexOf(distanceVector(candidate)), candidate);
 			points.remove(candidate);
 		}
-		
+
+        //prints out results
 		for(Vector v: hull) {
 			System.out.println(v);
 		}
@@ -63,10 +66,10 @@ public class ConvexHull {
 			return 2*Math.PI;
 		}
 		else if(cartesian.getY() > 0) {
-			return Vector.angleBetween(cartesian, new Vector(1, 0, 0));
+			return Vector.angleBetween(cartesian, new Vector(1, 0));
 		}
 		else if(cartesian.getY() <= 0) {
-			return 2*Math.PI - Vector.angleBetween(cartesian, new Vector(1, 0, 0));
+			return 2*Math.PI - Vector.angleBetween(cartesian, new Vector(1, 0));
 		}
 		else return 2*Math.PI;
 	}
@@ -105,8 +108,14 @@ public class ConvexHull {
 		for(int i = 0; i < numberOfPoints; i++) {
 			double xCoord = scan.nextDouble();
 			double yCoord = scan.nextDouble();
-			double zCoord = scan.nextDouble();
-			points.add(new Vector(xCoord, yCoord, zCoord));
+			points.add(new Vector(xCoord, yCoord));
 		}
 	}
+
+    public static void generatePoints(int numberOfPoints) {
+        PointGenerator pg = new PointGenerator(new Vector(gridSize, gridSize));
+        for(int i = 0; i < numberOfPoints; i++) {
+            points.add(pg.getVector());
+        }
+    }
 }
