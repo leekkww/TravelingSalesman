@@ -8,7 +8,7 @@ import java.util.Random;
 public class PointGenerator {
 
     private Vector max;
-    static private Random random = new Random();
+    static private Random random = new Random(200);
 
     public PointGenerator(Vector max) {
         this.max = max;

@@ -1,5 +1,6 @@
 package tspProject;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
@@ -7,58 +8,71 @@ import java.util.Scanner;
 public class ConvexHull {
 
     private static final double gridSize = 100;
+    private static final int numPoints = 10;
 	private static ArrayList<Vector> points = new ArrayList<Vector>();
 	private static ArrayList<Vector> hull = new ArrayList<Vector>();
 	
 	public static void main(String[] args) {
-		generatePoints(30);
-		System.out.println("Beginning...");
-		Vector rightMostPoint = points.get(0);
-		for(Vector v: points) {
-			if(v.getX() > rightMostPoint.getX()) {
-				rightMostPoint = v;
-			}
-			else if(v.getX() == rightMostPoint.getX() && v.getY() < rightMostPoint.getY()) {
-				rightMostPoint = v;
-			}
-		}
-		hull.add(0, rightMostPoint);
-		
-		//constructs convex hull
-		Vector frontier = rightMostPoint;
-		Vector candidate = Vector.nullVector();
-		while(!candidate.equals(rightMostPoint)) {
-			for(Vector v: points) {
-				if(angle(frontier, v) < angle(frontier, candidate)) {
-					candidate = v;
-				}
-				else if(angle(frontier, v) == angle(frontier, candidate) && Vector.distance(frontier, v) < Vector.distance(frontier, candidate)) {
-					candidate = v;
-				}
-			}
-			hull.add(candidate);
-			frontier = candidate;
-			points.remove(candidate);
-		}
-		
-		//adds points on the interior to the hull by checking for the closest point and working up. BUGGED
-		while(!points.isEmpty()) {
-			candidate = points.get(0);
-			double minDistance = distance(candidate);
-			for(Vector v: points) {
-				if(distance(v) < minDistance) {
-					candidate = v;
-				}
-			}
-			hull.add(hull.indexOf(distanceVector(candidate)), candidate);
-			points.remove(candidate);
-		}
+        //right now, I have the random in PointGenerator set as always 100 for debugging
+		generatePoints(numPoints);
+
+        //visualizer stuff, copied from Sir Dong
+        TSPVisualizer viz = new TSPVisualizer(hull,gridSize,1);
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.add(viz);
+        frame.setSize(viz.getWidth(), viz.getHeight());
+        frame.setVisible(true);
+
+        //right now, the visualizer prints out the result of whatever runs. if you want to debug, comment out either one of the methods
+        convexHull();
+        interior();
 
         //prints out results
 		for(Vector v: hull) {
 			System.out.println(v);
 		}
 	}
+
+    public static void convexHull() {
+        Vector rightMostPoint = points.get(0);
+        for(Vector v: points) {
+            if(v.getX() > rightMostPoint.getX() || (v.getX() == rightMostPoint.getX() && v.getY() < rightMostPoint.getY())) {
+                rightMostPoint = v;
+            }
+        }
+        hull.add(0, rightMostPoint);
+
+        //constructs convex hull
+        Vector frontier = rightMostPoint;
+        Vector candidate = Vector.nullVector();
+        while(!candidate.equals(rightMostPoint)) {
+            for(Vector v: points) {
+                if((angle(frontier, v) < angle(frontier, candidate)) || (angle(frontier, v) == angle(frontier, candidate) && Vector.distance(frontier, v) < Vector.distance(frontier, candidate))) {
+                    candidate = v;
+                }
+            }
+            hull.add(candidate);
+            frontier = candidate;
+            points.remove(candidate);
+        }
+    }
+
+    public static void interior() {
+        Vector candidate;
+        //adds points on the interior to the hull by checking for the closest point and working up. BUGGED
+        while(!points.isEmpty()) {
+            candidate = points.get(0);
+            double minDistance = distance(candidate);
+            for(Vector v: points) {
+                if(distance(v) < minDistance) {
+                    candidate = v;
+                }
+            }
+            hull.add(hull.indexOf(distanceVector(candidate)), candidate);
+            points.remove(candidate);
+        }
+    }
 	
 	public static double angle(Vector origin, Vector v) {
 		Vector cartesian = v.subtract(origin);
@@ -99,23 +113,23 @@ public class ConvexHull {
 		}
 		return least;
 	}
-	
-	public static void addPoints() {
-		Scanner scan = new Scanner(System.in);
-		System.out.println("How many points would you like to add?");
-		int numberOfPoints = scan.nextInt();
-		System.out.println("Enter points in format 'xcoord ycoord zcoord'.");
-		for(int i = 0; i < numberOfPoints; i++) {
-			double xCoord = scan.nextDouble();
-			double yCoord = scan.nextDouble();
-			points.add(new Vector(xCoord, yCoord));
-		}
-	}
 
     public static void generatePoints(int numberOfPoints) {
         PointGenerator pg = new PointGenerator(new Vector(gridSize, gridSize));
         for(int i = 0; i < numberOfPoints; i++) {
             points.add(pg.getVector());
+        }
+    }
+
+    public static void addPoints() {
+        Scanner scan = new Scanner(System.in);
+        System.out.println("How many points would you like to add?");
+        int numberOfPoints = scan.nextInt();
+        System.out.println("Enter points in format 'xcoord ycoord zcoord'.");
+        for(int i = 0; i < numberOfPoints; i++) {
+            double xCoord = scan.nextDouble();
+            double yCoord = scan.nextDouble();
+            points.add(new Vector(xCoord, yCoord));
         }
     }
 }
