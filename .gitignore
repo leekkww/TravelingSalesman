@@ -1,0 +1,11 @@
+# IDEA stuff
+.idea/
+.iml
+
+# built files
+dist
+.tmp
+.sass-cache
+
+# editor config
+.editorconfig
