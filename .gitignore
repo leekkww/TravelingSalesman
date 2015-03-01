@@ -1,2 +1,5 @@
 # IDEA stuff
 .idea/
+
+# compiler stuff
+bin/

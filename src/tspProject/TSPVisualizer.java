@@ -11,6 +11,7 @@ import javax.swing.Timer;
 
 /**
  * @author Peter Dong
+ * Edited by Joanne Lee
  * This class visualizes the Particles in a ParticleContainer in a two-dimensional projection 
  */
 public class TSPVisualizer extends JPanel implements ActionListener {
