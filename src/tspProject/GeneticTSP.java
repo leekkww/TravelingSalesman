@@ -17,15 +17,17 @@ public class GeneticTSP {
 		// input positions of cities. must be positive-valued.
         
 		double gridSize = 2;
-		int nVertices = 20;
+		int nVertices = 100;
 		int radius = 1;
+		PointGenerator pg = new PointGenerator(new Vector(gridSize,gridSize));
 		for (int i = 0; i<nVertices; i++)
 		{
-			list.add(new Vector(radius*Math.cos(2*i*Math.PI/nVertices)+1, radius*Math.sin(2*i*Math.PI/nVertices)+1 ));
+			//list.add(new Vector(radius*Math.cos(2*i*Math.PI/nVertices)+1, radius*Math.sin(2*i*Math.PI/nVertices)+1 ));
+			list.add(pg.getVector());
 		}
 		
 		int initPaths = 100;  // change magic numbers later?
-		int iterations = 10000;
+		int iterations = 100000;
 		ArrayList<Vector> darwin = TSP(initPaths, iterations);
 		
 		for(Vector v: darwin) {
@@ -79,7 +81,6 @@ public class GeneticTSP {
 		for(int i = 0; i < fixed.size(); i++) {
 			echo.add(Vector.nullVector());
 		}
-		System.out.println(echo.size());
 		do {
 			previous = new ArrayList<Vector>(fixed);
 			for(int i = 0; i < fixed.size() - 1; i++) {
@@ -102,7 +103,6 @@ public class GeneticTSP {
 							echo.set(n, fixed.get(n));
 						}
 						fixed = new ArrayList<Vector>(echo);
-						System.out.println(fixed);
 						for(int z = 0; z < fixed.size(); z++) {
 							echo.set(z, Vector.nullVector());
 						}
@@ -112,58 +112,6 @@ public class GeneticTSP {
 		} while(!previous.equals(fixed));
 		return fixed;
 	}
-		
-		/*boolean fixed = false;
-		while (!fixed)
-		{
-			for (int i=0; i<path.size()-1; i++)
-			{
-				for (int j=i+2; j<path.size()-1; j++)
-					{
-				
-					Vector high1=path.get(i+1);
-					Vector low1=path.get(i);
-					Vector high2=path.get(j+1);
-					Vector low2=path.get(j);
-				
-
-					if (high1.subtract(low1).magnitude()+high2.subtract(low2).magnitude()>
-					high1.subtract(low2).magnitude()+high2.subtract(low1).magnitude())
-					{
-						Vector newLow1=low1;
-						Vector newLow2=low2;
-						
-						path.set(i, newLow2);
-						path.set(j, newLow1);
-					}
-					
-					ArrayList<Vector> echo = new ArrayList<Vector>();	
-					System.out.println("testing");
-					if (high1.subtract(low1).magnitude()+high2.subtract(low2).magnitude()>
-						high1.subtract(high2).magnitude()+low2.subtract(low1).magnitude())
-						{
-						System.out.println("flipperino");
-							for (int k=0; k<=i; k++)
-								echo.add(path.get(k));
-							for (int k=j; k>i; k--)
-								echo.add(path.get(k));
-							for (int k=j+1; k<path.size(); k++)
-								echo.add(path.get(k));
-						
-						}
-					else System.out.println("no flipperino");
-				
-					if (path.equals(echo)) 
-						fixed = true;
-				
-					path = echo;
-					System.out.println("checked");
-				
-
-				}
-			}
-		}
-	}*/
 	
 	public static void mutation() {
 		Random random = new Random();
