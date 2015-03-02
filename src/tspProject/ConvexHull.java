@@ -17,16 +17,16 @@ public class ConvexHull {
 		generatePoints(numPoints);
 
         //visualizer stuff, copied from Sir Dong
-        TSPVisualizer viz = new TSPVisualizer(hull,gridSize,1);
+        /*TSPVisualizer viz = new TSPVisualizer(hull,gridSize,1);
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(viz);
         frame.setSize(viz.getWidth(), viz.getHeight());
-        frame.setVisible(true);
+        frame.setVisible(true);*/
 
         //right now, the visualizer prints out the result of whatever runs. if you want to debug, comment out either one of the methods
         convexHull();
-        interior();
+        //interior();
 
         //prints out results
 		for(Vector v: hull) {
@@ -41,15 +41,17 @@ public class ConvexHull {
                 rightMostPoint = v;
             }
         }
-        hull.add(0, rightMostPoint);
+        hull.add(rightMostPoint);
 
         //constructs convex hull
         Vector frontier = rightMostPoint;
         Vector candidate = Vector.nullVector();
         while(!candidate.equals(rightMostPoint)) {
             for(Vector v: points) {
-                if((angle(frontier, v) < angle(frontier, candidate)) || (angle(frontier, v) == angle(frontier, candidate) && Vector.distance(frontier, v) < Vector.distance(frontier, candidate))) {
+            	///System.out.println(v);
+                if(angle(frontier, v) < angle(frontier, candidate) || ((angle(frontier, v) == angle(frontier, candidate) && Vector.distance(frontier, v) < Vector.distance(frontier, candidate)))) {
                     candidate = v;
+                    //System.out.println("YES" + candidate);
                 }
             }
             hull.add(candidate);
@@ -76,16 +78,24 @@ public class ConvexHull {
 	
 	public static double angle(Vector origin, Vector v) {
 		Vector cartesian = v.subtract(origin);
+		double angle = Vector.angleBetween(cartesian, new Vector(0, 1));
 		if(cartesian.magnitude() == 0) {
-			return 2*Math.PI;
+			angle = 2*Math.PI;
 		}
-		else if(cartesian.getY() > 0) {
-			return Vector.angleBetween(cartesian, new Vector(1, 0));
+		else if(cartesian.getY() < 0 && cartesian.getX() < 0) {
+			angle = angle + 2*(Math.PI/2 - angle);
 		}
-		else if(cartesian.getY() <= 0) {
-			return 2*Math.PI - Vector.angleBetween(cartesian, new Vector(1, 0));
+		else if(cartesian.getY() > 0 && cartesian.getX() < 0) {
+			angle = angle + 2*Math.PI - 2*(Math.PI/2 + angle);
 		}
-		else return 2*Math.PI;
+		else if(cartesian.getY() < 0 && cartesian.getX() == 0) {
+			angle = Math.PI;
+		}
+		else {
+			angle = 2*Math.PI;
+		}
+		System.out.println(cartesian.magnitude());
+		return angle;
 	}
 	
 	public static double distance(Vector v) {
